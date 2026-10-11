@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wisnu Furniture — Order & Production Tracker</title>
+  <title>Wisnu Furniture — Production & PO Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --accent: #f59e0b;
-      --accent-glow: rgba(245, 158, 11, 0.15);
+      --accent-glow: rgba(245, 158, 11, 0.12);
       --success: #10b981;
     }
 
@@ -29,7 +29,7 @@
       min-height: 100vh;
     }
 
-    .container { max-width: 1200px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; }
 
     header {
       display: flex;
@@ -76,89 +76,141 @@
     }
     .search-box input:focus { outline: none; border-color: var(--accent); }
 
-    /* KOTAK CLIENT */
-    .client-section {
-      margin-bottom: 32px;
+    /* FOLDER KLIEN (ACCORDION) */
+    .client-folder {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
-    .client-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 14px;
+    
+    .client-folder-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .client-folder-header:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    
+    .client-info-left {
       display: flex;
       align-items: center;
-      gap: 8px;
-      border-left: 4px solid var(--accent);
-      padding-left: 10px;
+      gap: 12px;
+    }
+    .folder-icon {
+      font-size: 1.5rem;
+    }
+    .client-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .client-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
     }
 
-    /* KOTAK ORDER / PO */
+    .client-info-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .toggle-arrow {
+      font-size: 1rem;
+      color: var(--muted);
+      transition: transform 0.3s ease;
+    }
+    .client-folder.active .toggle-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* KONTEN PO DI DALAM FOLDER */
+    .client-folder-content {
+      display: none;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      background: #0f172a;
+    }
+    .client-folder.active .client-folder-content {
+      display: block;
+    }
+
+    /* KARTU PO / ORDER */
     .order-card {
       background: var(--order-bg);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
+    .order-card:last-child { margin-bottom: 0; }
+
     .order-header {
-      padding: 16px 20px;
+      padding: 14px 18px;
       background: var(--accent-glow);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
     }
-    .order-info h3 {
-      font-size: 1.05rem;
+    .order-title {
+      font-size: 1rem;
       font-weight: 700;
       color: #fbbf24;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .order-info p {
-      font-size: 0.8rem;
+    .order-meta {
+      font-size: 0.78rem;
       color: var(--muted);
-      margin-top: 3px;
     }
+    
     .order-stats {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
-    .progress-bar-container {
-      width: 120px;
+    .progress-track {
+      width: 100px;
       height: 8px;
       background: #334155;
-      border-radius: 6px;
+      border-radius: 4px;
       overflow: hidden;
     }
-    .progress-bar-fill {
+    .progress-fill {
       height: 100%;
       background: var(--success);
-      border-radius: 6px;
-      transition: width 0.3s ease;
+      border-radius: 4px;
     }
-    .progress-label {
+    .progress-percent {
       font-size: 0.85rem;
       font-weight: 700;
       color: #fff;
     }
 
-    /* GRID ITEM DI DALAM ORDER */
+    /* GRID BARANG */
     .items-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 14px;
-      padding: 18px;
+      padding: 16px;
     }
     .item-card {
-      background: #0f172a;
+      background: #0b1120;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -181,11 +233,11 @@
       position: absolute;
       top: 8px;
       left: 8px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border);
       color: #38bdf8;
       text-transform: uppercase;
@@ -197,7 +249,7 @@
       flex: 1;
     }
     .item-title {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       color: #fff;
       margin-bottom: 4px;
@@ -219,24 +271,24 @@
     .item-details span b { color: #e2e8f0; }
 
     .item-progress-box { margin-top: auto; }
-    .item-progress-header {
+    .item-progress-meta {
       display: flex;
       justify-content: space-between;
       font-size: 0.75rem;
       margin-bottom: 4px;
     }
-    .item-progress-track {
+    .bar-bg {
       height: 6px;
       background: #334155;
       border-radius: 3px;
       overflow: hidden;
     }
-    .item-progress-bar {
+    .bar-val {
       height: 100%;
       background: var(--success);
     }
 
-    /* MODAL ZOOM GAMBAR */
+    /* MODAL ZOOM */
     .modal-zoom {
       display: none;
       position: fixed;
@@ -265,18 +317,18 @@
     <header>
       <div class="brand">
         <h1>🪵 Wisnu Furniture</h1>
-        <p>Sistem Pemantauan Status Produksi & Kontrol PO</p>
+        <p>Sistem Pemantauan Produksi & PO Klien</p>
       </div>
       <button class="btn-refresh" onclick="fetchData()">🔄 Segarkan Data</button>
     </header>
 
     <div class="controls">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Cari nama pemesan, PO, barang, tukang..." oninput="renderDashboard()">
+        <input type="text" id="searchInput" placeholder="Cari nama klien, nomor PO, atau nama barang..." oninput="renderDashboard()">
       </div>
     </div>
 
-    <div id="loading">Memuat data pesanan...</div>
+    <div id="loading">Memuat data dari Google Sheets...</div>
     <div id="dashboard"></div>
   </div>
 
@@ -286,8 +338,8 @@
   </div>
 
   <script>
-    // MASUKKAN LINK CSV GOOGLE SHEETS ANDA DI SINI:
-    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9ky0C2Atufr8xEasq_SgRJpyJOuFfabsCEBKrlXJp4I1KLTfjcELSyxfNsI-v89H0PsbWsP8YZ-DP/pub?output=csv";
+    // Link CSV Anda sudah terpasang:
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9ky0C2Atufr8xEasq_SgRJpyJOuFfabsCEBKrIXJp4l1KLTfjcELSyxfNsI-v89HOPsbWsP8YZ-DP/pub?output=csv";
 
     let allData = [];
 
@@ -296,13 +348,11 @@
       loader.style.display = 'block';
 
       try {
-        if (!GOOGLE_SHEET_CSV_URL.includes("CONTOH_GANTI")) {
-          const res = await fetch(GOOGLE_SHEET_CSV_URL + '&_t=' + new Date().getTime());
-          const text = await res.text();
-          allData = parseCSV(text);
-        }
+        const res = await fetch(GOOGLE_SHEET_CSV_URL + '&_t=' + new Date().getTime());
+        const text = await res.text();
+        allData = parseCSV(text);
       } catch (err) {
-        console.warn("Gagal memuat CSV:", err);
+        console.warn("Gagal memuat:", err);
       }
 
       loader.style.display = 'none';
@@ -314,13 +364,11 @@
       const list = [];
 
       for (let i = 1; i < lines.length; i++) {
-        // Regex pembaca CSV agar aman dari koma dalam teks
         const col = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^"\vert{}"$/g, ''));
-        
         if (col.length >= 2 && col[0]) {
           list.push({
             customer: col[0],
-            orderId: col[1] || "PO Reguler",
+            orderId: col[1] || "PO Utama",
             item: col[2] || "-",
             qty: parseInt(col[3]) || 1,
             location: col[4] || "Gudang",
@@ -341,16 +389,16 @@
       const container = document.getElementById('dashboard');
       container.innerHTML = '';
 
-      // Struktur Data Bertingkat: Customer -> PO / Order -> Array Barang
+      // Struktur Data: Klien -> PO -> Barang
       const groups = {};
 
       allData.forEach(row => {
-        const matches = row.customer.toLowerCase().includes(search) ||
-                        row.orderId.toLowerCase().includes(search) ||
-                        row.item.toLowerCase().includes(search) ||
-                        row.artisan.toLowerCase().includes(search);
+        const match = row.customer.toLowerCase().includes(search) ||
+                      row.orderId.toLowerCase().includes(search) ||
+                      row.item.toLowerCase().includes(search) ||
+                      row.artisan.toLowerCase().includes(search);
 
-        if (matches) {
+        if (match) {
           if (!groups[row.customer]) groups[row.customer] = {};
           if (!groups[row.customer][row.orderId]) groups[row.customer][row.orderId] = [];
           groups[row.customer][row.orderId].push(row);
@@ -358,32 +406,42 @@
       });
 
       if (Object.keys(groups).length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding: 40px; color: #94a3b8;">Belum ada data pesanan yang sesuai.</div>';
+        container.innerHTML = '<div style="text-align:center; padding: 40px; color: #94a3b8;">Belum ada pesanan yang sesuai.</div>';
         return;
       }
 
+      let clientIndex = 0;
       for (const [customer, orders] of Object.entries(groups)) {
-        const clientSec = document.createElement('div');
-        clientSec.className = 'client-section';
+        const poCount = Object.keys(orders).length;
+        let totalItemsInClient = 0;
+        let totalClientProg = 0;
+
+        for (const items of Object.values(orders)) {
+          totalItemsInClient += items.length;
+          totalClientProg += items.reduce((acc, it) => acc + it.progress, 0);
+        }
+        const avgClientProg = totalItemsInClient ? Math.round(totalClientProg / totalItemsInClient) : 0;
+
+        const folderEl = document.createElement('div');
+        // Folder pertama otomatis terbuka (active) secara default agar langsung terlihat
+        folderEl.className = `client-folder ${clientIndex === 0 ? 'active' : ''}`;
 
         let ordersHtml = '';
-
         for (const [orderId, items] of Object.entries(orders)) {
-          const totalProgress = items.reduce((acc, it) => acc + it.progress, 0);
-          const avgProgress = Math.round(totalProgress / items.length);
+          const avgPoProg = Math.round(items.reduce((s, it) => s + it.progress, 0) / items.length);
 
           ordersHtml += `
             <div class="order-card">
               <div class="order-header">
-                <div class="order-info">
-                  <h3>📦 ${orderId}</h3>
-                  <p>Memuat <b>${items.length} item</b> pengerjaan</p>
+                <div>
+                  <div class="order-title">📦 ${orderId}</div>
+                  <div class="order-meta">${items.length} Barang dalam PO ini</div>
                 </div>
                 <div class="order-stats">
-                  <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: ${avgProgress}%"></div>
+                  <div class="progress-track">
+                    <div class="progress-fill" style="width: ${avgPoProg}%"></div>
                   </div>
-                  <div class="progress-label">${avgProgress}%</div>
+                  <div class="progress-percent">${avgPoProg}%</div>
                 </div>
               </div>
 
@@ -402,12 +460,12 @@
                         <span>📅 Target: <b>${it.targetDate}</b></span>${it.notes !== '-' ? `<span>📝 Catatan: ${it.notes}</span>` : ''}
                       </div>
                       <div class="item-progress-box">
-                        <div class="item-progress-header">
+                        <div class="item-progress-meta">
                           <span style="color:var(--muted)">Progres</span>
                           <b>${it.progress}%</b>
                         </div>
-                        <div class="item-progress-track">
-                          <div class="item-progress-bar" style="width: ${it.progress}%"></div>
+                        <div class="bar-bg">
+                          <div class="bar-val" style="width: ${it.progress}%"></div>
                         </div>
                       </div>
                     </div>
@@ -418,11 +476,27 @@
           `;
         }
 
-        clientSec.innerHTML = `
-          <div class="client-title">👤 Klien: ${customer}</div>
-          ${ordersHtml}
+        folderEl.innerHTML = `
+          <div class="client-folder-header" onclick="this.parentElement.classList.toggle('active')">
+            <div class="client-info-left">
+              <div class="folder-icon">📁</div>
+              <div>
+                <div class="client-name">${customer}</div>
+                <div class="client-subtitle">${poCount} PO Aktif • ${totalItemsInClient} Total Barang</div>
+              </div>
+            </div>
+            <div class="client-info-right">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--success)">${avgClientProg}% Selesai</span>
+              <span class="toggle-arrow">▼</span>
+            </div>
+          </div>
+          <div class="client-folder-content">
+            ${ordersHtml}
+          </div>
         `;
-        container.appendChild(clientSec);
+
+        container.appendChild(folderEl);
+        clientIndex++;
       }
     }
 
