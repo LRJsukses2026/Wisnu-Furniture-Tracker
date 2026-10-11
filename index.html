@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wisnu Furniture — Pelacak Status & Progres Barang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #d97706; /* Nuansa Jati Emas */
+      --primary-hover: #b45309;
+      --badge-pengrajin: #eab308;
+      --badge-finishing: #38bdf8;
+      --badge-packing: #4ade80;
+      --badge-selesai: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding: 16px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+    }
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-main); }
+    .btn-outline:hover { background: var(--card-border); }
+
+    /* FILTER & SEARCH */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.875rem;
+    }
+    .search-box input:focus { outline: 1px solid var(--primary); }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8125rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pill.active {
+      background: #fbbf24;
+      color: #0f172a;
+      font-weight: 700;
+      border-color: #fbbf24;
+    }
+
+    /* CUSTOMER CARD */
+    .customer-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .customer-header {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .customer-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+    .customer-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+    .overall-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-bar-wrap {
+      width: 120px;
+      height: 8px;
+      background: #334155;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #10b981;
+      border-radius: 4px;
+    }
+
+    /* ITEMS GRID */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .item-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .item-thumb-wrap {
+      width: 100%;
+      height: 180px;
+      background: #0f172a;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--card-border);
+      overflow: hidden;
+    }
+    .item-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .item-thumb-wrap:hover img {
+      transform: scale(1.05);
+    }
+    .thumb-placeholder {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      text-align: center;
+      padding: 10px;
+    }
+    .badge-loc {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .loc-pengrajin { background: var(--badge-pengrajin); color: #000; }
+    .loc-finishing { background: var(--badge-finishing); color: #000; }
+    .loc-packing { background: var(--badge-packing); color: #000; }
+    .loc-selesai { background: var(--badge-selesai); color: #000; }
+
+    .item-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .item-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .item-stage {
+      font-size: 0.8125rem;
+      color: #fbbf24;
+      margin-bottom: 10px;
+    }
+    .item-info {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .item-progress-wrap {
+      margin-top: auto;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .progress-bar {
+      height: 6px;
+      background: #334155;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #10b981;
+    }
+
+    /* MODAL ZOOM GAMBAR */
+    .modal-zoom {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-zoom img {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>🪵 Wisnu Furniture</h1>
+        <p>Sistem Pemantauan Status Produksi & Ekspedisi Gudang</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="fetchData()">🔄 Segarkan Data</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Cari nama pemesan, barang, atau tukang..." oninput="filterData()">
+      </div>
+      <div class="filter-pills">
+        <button class="pill active" onclick="setFilter('all', this)">Semua Lokasi</button>
+        <button class="pill" onclick="setFilter('pengrajin', this)">Di Pengrajin</button>
+        <button class="pill" onclick="setFilter('finishing', this)">Gudang Finishing</button>
+        <button class="pill" onclick="setFilter('packing', this)">Siap Kirim</button>
+      </div>
+    </div>
+
+    <div id="loading">Memuat data dari Google Sheets...</div>
+    <div id="dashboard"></div>
+  </div>
+
+  <!-- MODAL ZOOM FOTO -->
+  <div class="modal-zoom" id="modalZoom" onclick="closeZoom()">
+    <span class="modal-close">&times;</span>
+    <img id="zoomImg" src="" alt="Detail Foto Fisik">
+  </div>
+
+  <script>
+    // TEMPEL LINK CSV DARI GOOGLE SHEETS ANDA DI BAWAH INI:
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR_CONTOH_GANTI_DENGAN_LINK_CSV_ANDA/pub?output=csv";
+
+    // Contoh data bawaan Wisnu Furniture (otomatis aktif jika link Sheets belum diganti)
+    const fallbackData = [
+      { customer: "Mark", item: "Meja Makan Solid Trembesi 300cm", qty: 1, location: "pengrajin", stage: "Konstruksi Rangka Mentah", progress: 40, artisan: "Pak Kastur (Tahunan)", targetDate: "2026-10-25", notes: "Urat kayu natural doff", photo: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600" },
+      { customer: "Mark", item: "Kursi Makan Retro Kayu Jati (Set 8)", qty: 8, location: "finishing", stage: "Amplas Halus & Staining Walnut", progress: 70, artisan: "Tim Finishing Wisnu", targetDate: "2026-10-28", notes: "Finishing matte walnut", photo: "https://images.unsplash.com/photo-1503602642458-232111445657?w=600" },
+      { customer: "Mark", item: "Buffet TV Minimalis Kayu Jati", qty: 1, location: "packing", stage: "Packing Foamsheet & Kardus", progress: 100, artisan: "Gudang Wisnu", targetDate: "2026-10-15", notes: "Lolos QC akhir, siap truk", photo: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600" },
+      { customer: "Pak Hendra", item: "Dipan Tempat Tidur Ukir 180x200", qty: 1, location: "pengrajin", stage: "Pengerjaan Ukiran Mahkota", progress: 30, artisan: "Pak Joko (Bapangan)", targetDate: "2026-11-02", notes: "Ukir khas Jepara", photo: "" }
+    ];
+
+    let allOrders = [];
+    let currentFilter = 'all';
+
+    async function fetchData() {
+      const loader = document.getElementById('loading');
+      loader.style.display = 'block';
+
+      try {
+        if (!GOOGLE_SHEET_CSV_URL.includes("CONTOH_GANTI")) {
+          const res = await fetch(GOOGLE_SHEET_CSV_URL);
+          const text = await res.text();
+          allOrders = parseCSV(text);
+        } else {
+          allOrders = fallbackData;
+        }
+      } catch (err) {
+        console.warn("Memakai data contoh cadangan:", err);
+        allOrders = fallbackData;
+      }
+
+      loader.style.display = 'none';
+      renderDashboard();
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const result = [];
+      for (let i = 1; i < lines.length; i++) {
+        const col = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+        if (col.length >= 2 && col[0]) {
+          result.push({
+            customer: col[0],
+            item: col[1] || "-",
+            qty: parseInt(col[2]) || 1,
+            location: (col[3] || "pengrajin").toLowerCase(),
+            stage: col[4] || "Dalam Proses",
+            progress: parseInt(col[5]) || 0,
+            artisan: col[6] || "-",
+            targetDate: col[7] || "-",
+            notes: col[8] || "-",
+            photo: col[9] || ""
+          });
+        }
+      }
+      return result;
+    }
+
+    function setFilter(loc, btn) {
+      currentFilter = loc;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      renderDashboard();
+    }
+
+    function filterData() {
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const container = document.getElementById('dashboard');
+      container.innerHTML = '';
+
+      // Kelompokkan barang berdasarkan nama pemesan
+      const grouped = {};
+      allOrders.forEach(order => {
+        const matchesFilter = currentFilter === 'all' || order.location === currentFilter;
+        const matchesSearch = order.customer.toLowerCase().includes(search) || 
+                              order.item.toLowerCase().includes(search) || 
+                              order.artisan.toLowerCase().includes(search);
+
+        if (matchesFilter && matchesSearch) {
+          if (!grouped[order.customer]) grouped[order.customer] = [];
+          grouped[order.customer].push(order);
+        }
+      });
+
+      if (Object.keys(grouped).length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding: 40px; color: #94a3b8;">Tidak ada data barang yang ditemukan.</div>';
+        return;
+      }
+
+      for (const [customer, items] of Object.entries(grouped)) {
+        const totalProgress = Math.round(items.reduce((acc, it) => acc + it.progress, 0) / items.length);
+
+        const card = document.createElement('div');
+        card.className = 'customer-card';
+        card.innerHTML = `
+          <div class="customer-header">
+            <div>
+              <div class="customer-title">👤 Pemesan: ${customer}</div>
+              <div class="customer-meta">Total: ${items.length} Barang dipantau</div>
+            </div>
+            <div class="overall-progress">
+              <span style="font-size:0.8125rem; font-weight:600;">Rata-rata: ${totalProgress}%</span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: ${totalProgress}%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="items-grid">
+            ${items.map(it => `
+              <div class="item-card">
+                <div class="item-thumb-wrap" onclick="openZoom('${it.photo}')">
+                  ${it.photo ? `<img src="${it.photo}" alt="${it.item}">` : `<div class="thumb-placeholder">📷 Belum ada foto fisik<br><small style="color:#64748b;">(Tempel link foto di Sheets)</small></div>`}
+                  <span class="badge-loc loc-${it.location}">${it.location}</span>
+                </div>
+                <div class="item-body">
+                  <div class="item-name">${it.item} (${it.qty} pcs)</div>
+                  <div class="item-stage">⚙️ ${it.stage}</div>
+                  <div class="item-info">
+                    <div>📍 Bengkel/Tukang: <b>${it.artisan}</b></div>
+                    <div>📅 Target Selesai: <b>${it.targetDate}</b></div>${it.notes !== '-' ? `<div>📝 Catatan: ${it.notes}</div>` : ''}
+                  </div>
+                  <div class="item-progress-wrap">
+                    <div class="progress-text">
+                      <span>Progres</span>
+                      <b>${it.progress}%</b>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: ${it.progress}%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function openZoom(src) {
+      if (!src) return;
+      document.getElementById('zoomImg').src = src;
+      document.getElementById('modalZoom').style.display = 'flex';
+    }
+
+    function closeZoom() {
+      document.getElementById('modalZoom').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchData);
+  </script>
+</body>
+</html>
