@@ -321,23 +321,7 @@ input[type=checkbox]{accent-color:var(--g);width:18px;height:18px}
   var S={
     name:'GUDANG WISNU',logo:null,tab:'home',filter:'Semua',view:null,sheet:null,tmp:null,confirm:false,
     anim:true,dir:1,soft:false,scrollEnd:null,gtab:'stok',invCat:'Semua',q:'',
-    orders:[
-      {code:'LRJ-230',name:'Mauritius',cust:'PT Island Living',dl:12,mode:'grup',sent:0,
-       photos:[{url:sample('Contoh: rakit meja selesai','#C9A66B','#7B5230'),cap:'Rakit meja makan selesai',d:dshort(2)},{url:sample('Contoh: amplas kursi','#B8905A','#6E4A2A'),cap:'Amplas kursi 12 unit',d:dshort(1)}],
-       groups:[
-        g('Kursi makan jati','chair',12,'Bambang','Ruang amplas',['Selesai','Selesai','Proses']),
-        g('Meja makan 8 kursi','table',6,'Cahyo','Bengkel rakit',['Selesai','Proses'],{1:'Rangka kaki dikerjakan dua orang'}),
-        g('Lemari pakaian','cabinet',4,'Dedi','Bengkel potong',['Proses']),
-        g('Dipan king size','bed',8,'Eko','Ruang finishing',['Selesai','Lewati','Selesai','Proses'],{1:'Sistem knock-down, tanpa rakit'})
-      ]},
-      {code:'LRJ-231',name:'Hotel Pesisir',cust:'Hotel Pesisir',dl:3,mode:'grup',sent:0,photos:[],groups:[
-        g('Dipan + headboard','bed',14,'Fajar','Gudang packing',['Selesai','Lewati','Selesai','Selesai','Proses']),
-        g('Nakas ukir','cabinet',6,'Gunawan','Ruang finishing',['Selesai','Selesai','Selesai','Proses'])
-      ]},
-      {code:'LRJ-228',name:'Bufet TV Sari',cust:'Ibu Sari',dl:-1,mode:'satu',sent:0,photos:[],groups:[
-        g('Bufet TV minimalis','cabinet',4,'Hadi','Siap kirim',['Selesai','Selesai','Selesai','Selesai','Selesai','Proses'],{5:'Menunggu ekspedisi'})
-      ]}
-    ],
+    orders:[],
     emps:[emp('Agus','Tukang potong','Hadir'),emp('Bambang','Tukang amplas','Hadir'),emp('Cahyo','Tukang rakit','Hadir',true),emp('Dedi','Tukang potong','Hadir'),
       emp('Eko','Finishing','Hadir'),emp('Fajar','Packing','Hadir',true),emp('Gunawan','Finishing','Hadir'),emp('Hadi','Packing','Hadir'),
       emp('Imam','Tukang rakit','Izin'),emp('Joko','Tukang amplas','Sakit'),emp('Kuswanto','Gudang','Hadir'),emp('Lukman','Tukang ukir','')],
@@ -347,7 +331,7 @@ input[type=checkbox]{accent-color:var(--g);width:18px;height:18px}
       {n:'Kardus + busa packing',u:'set',q:46,min:30},{n:'Engsel & handle',u:'pcs',q:220,min:100}
     ],
     moves:[{t:'08.10',type:'Masuk',n:'Kayu jati papan 3 cm',q:30,u:'lembar',note:'Pemasok kayu'},{t:'09.30',type:'Keluar',n:'Lem kayu',q:3,u:'kg',note:'Bagian rakit'}],
-    out:[{order:'Mauritius',stage:'Finishing',q:4},{order:'Bufet TV Sari',stage:'Packing',q:2},{order:'Hotel Pesisir',stage:'Packing',q:5}],
+    out:[],
     inv:[
       inv('INV-001','Mesin serut (planer)','Mesin','Bengkel potong, area A',1,'unit','Baik','Servis terakhir bulan lalu'),
       inv('INV-002','Gergaji circular','Mesin','Bengkel potong, area A',2,'unit','Baik'),
