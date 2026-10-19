@@ -1,8 +1,10 @@
-/* Service worker Gudang Wisnu: menyimpan file aplikasi di HP agar cepat dibuka dan tetap jalan tanpa internet. */
-var CACHE = 'gudang-wisnu-v3';
+/* Service worker Gudang Wisnu: menyimpan file aplikasi di HP agar cepat dibuka dan tetap bisa dibuka tanpa internet.
+   Permintaan ke Supabase (data dan foto) tidak disentuh di sini. */
+var CACHE = 'gudang-wisnu-v4';
 var SHELL = [
   './',
   'index.html',
+  'config.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -24,23 +26,23 @@ self.addEventListener('activate', function (e) {
   );
 });
 
+function networkFirst(r, key) {
+  return fetch(r).then(function (res) {
+    var cp = res.clone();
+    caches.open(CACHE).then(function (c) { c.put(key || r, cp); });
+    return res;
+  }).catch(function () { return caches.match(key || r); });
+}
+
 self.addEventListener('fetch', function (e) {
   var r = e.request;
   if (r.method !== 'GET') return;
   var u = new URL(r.url);
 
   if (u.origin === location.origin) {
-    // Halaman utama: coba jaringan dulu (agar versi baru langsung terpakai), cadangan dari cache
-    if (r.mode === 'navigate') {
-      e.respondWith(
-        fetch(r).then(function (res) {
-          var cp = res.clone();
-          caches.open(CACHE).then(function (c) { c.put('index.html', cp); });
-          return res;
-        }).catch(function () { return caches.match('index.html'); })
-      );
-      return;
-    }
+    // Halaman utama dan config.js: jaringan dulu agar versi/konfigurasi baru langsung terpakai
+    if (r.mode === 'navigate') { e.respondWith(networkFirst(r, 'index.html')); return; }
+    if (/\/(config\.js|index\.html)$/.test(u.pathname)) { e.respondWith(networkFirst(r)); return; }
     // File lain (ikon, manifest): cache dulu
     e.respondWith(
       caches.match(r).then(function (hit) {
