@@ -501,11 +501,33 @@ input[type=checkbox]{accent-color:var(--g);width:18px;height:18px}
     if(full)h+='<p class="sub" style="text-align:center">Sudah mencapai batas '+MAXEMP+' karyawan. Hapus satu untuk menambah.</p>';
     return h;
   }
+  window.aksiEditStok = function(idx) {
+  var item = S.stock[idx];
+  if (!item) return;
+  var baru = prompt('Ubah jumlah stok untuk ' + item.n + ' (' + item.u + '):', item.q);
+  if (baru !== null && baru.trim() !== '') {
+    item.q = Number(baru);
+    if (typeof sync === 'function') sync();
+    if (typeof render === 'function') render();
+    else location.reload();
+  }
+};
+
+window.aksiHapusStok = function(idx) {
+  var item = S.stock[idx];
+  if (!item) return;
+  if (confirm('Yakin ingin menghapus barang "' + item.n + '" dari daftar stok?')) {
+    S.stock.splice(idx, 1);
+    if (typeof sync === 'function') sync();
+    if (typeof render === 'function') render();
+    else location.reload();
+  }
+};
   function pStok(){
     var h='<div class="stats st"'+nx()+'><button class="btn" data-a="stockSheet" data-v="Masuk">Barang masuk</button><button class="btn ghost" style="margin-top:0" data-a="stockSheet" data-v="Keluar">Barang keluar</button></div>';
     h+='<div class="sech st"'+nx()+'><h2>Stok saat ini</h2></div><div class="card st" style="--i:3;padding-top:2px;padding-bottom:2px">';
     if(!S.stock.length)h+='<div class="empty">Belum ada data stok.</div>';
-    S.stock.forEach(function(x,i){var l=x.q<x.min;h+='<div class="stock" style="display:flex;justify-content:space-between;align-items:center;"><div><b style="font-size:15px">'+esc(x.n)+'</b><div class="sub">Minimum '+x.min+' '+esc(x.u)+'</div><div style="margin-top:6px;display:flex;gap:6px;"><button type="button" onclick="event.stopPropagation();var b=prompt(\'Ubah stok '+esc(x.n)+':\',x.q);if(b!==null&&b!==\'\'){x.q=Number(b);if(window.saveData)saveData();location.reload();}" style="font-size:11px;padding:3px 8px;border-radius:4px;border:none;background:#e0e7ff;color:#3730a3;cursor:pointer;">✏️ Edit</button><button type="button" onclick="event.stopPropagation();if(confirm(\'Hapus '+esc(x.n)+' dari stok?\')){S.stock.splice('+i+',1);if(window.saveData)saveData();location.reload();}" style="font-size:11px;padding:3px 8px;border-radius:4px;border:none;background:#fee2e2;color:#991b1b;cursor:pointer;">🗑️ Hapus</button></div></div><div class="q" style="text-align:right;"><div style="font-size:18px;font-weight:bold;color:'+(l?'var(--bad)':'inherit')+';">'+x.q+'</div><div class="sub">'+esc(x.u)+'</div></div></div>';});
+    S.stock.forEach(function(x,i){var l=x.q<x.min;h+='<div class="stock" style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;"><div><b style="font-size:15px">'+esc(x.n)+'</b><div class="sub">Minimum '+x.min+' '+esc(x.u)+'</div><div style="margin-top:8px;display:flex;gap:8px;"><button type="button" onpointerdown="window.aksiEditStok('+i+')" style="font-size:12px;padding:4px 10px;border-radius:6px;border:none;background:#e0e7ff;color:#3730a3;font-weight:600;">✏️ Edit</button><button type="button" onpointerdown="window.aksiHapusStok('+i+')" style="font-size:12px;padding:4px 10px;border-radius:6px;border:none;background:#fee2e2;color:#991b1b;font-weight:600;">🗑️ Hapus</button></div></div><div class="q" style="text-align:right;"><div style="font-size:18px;font-weight:bold;color:'+(l?'var(--bad)':'inherit')+';">'+x.q+'</div><div class="sub">'+esc(x.u)+'</div></div></div>';});
     h+='</div><div class="sech st"'+nx()+'><h2>Riwayat hari ini</h2></div><div class="card st"'+nx()+'>';
     if(!S.moves.length)h+='<div class="empty">Belum ada barang masuk atau keluar.</div>';
     S.moves.slice().reverse().forEach(function(m){h+='<div class="mv"><span>'+esc(m.t)+' · '+esc(m.n)+'<div class="sub">'+esc(m.note||'')+'</div></span><span class="'+(m.type==='Masuk'?'in':'outc')+'">'+(m.type==='Masuk'?'+':'−')+m.q+' '+esc(m.u)+'</span></div>'});
