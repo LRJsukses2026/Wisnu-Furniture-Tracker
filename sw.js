@@ -1,5 +1,5 @@
 /* Service worker Gudang Wisnu: menyimpan file aplikasi di HP agar cepat dibuka dan tetap jalan tanpa internet. */
-var CACHE = 'gudang-wisnu-v2';
+var CACHE = 'gudang-wisnu-v3';
 var SHELL = [
   './',
   'index.html',
